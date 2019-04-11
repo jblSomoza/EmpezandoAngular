@@ -1,0 +1,30 @@
+<app-bavbar></app-bavbar>
+
+<div class="container">
+    <div class="row justify-content-md-center">
+        <div class="col-md-auto">
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Usuario</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Rol</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let u of user">
+                        <th>{{u._id}}</th>
+                        <td>{{u.nombre}}</td>
+                        <td>{{u.usuario}}</td>
+                        <td>{{u.email}}</td>
+                        <td>{{u.rol}}</td>
+                        <td><button type="button" class="btn btn-success">Ingresar</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

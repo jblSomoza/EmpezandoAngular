@@ -1,0 +1,28 @@
+<form #editUserForm="ngForm" (ngSubmit)="editUser()">
+  <div class="form-group">
+    <img src="{{ url + 'obtener-imagen-usuario/' + user.image}}" class="rounded-circle" width="200" height="200" *ngIf="user.image"/>
+    <img src="./assets/user.png" class="rounded-circle" width="200" height="200" *ngIf="!user.image"/>
+    <label for="Nombre">Nombre</label>
+    <input type="text" name="nombre" #nombre="ngModel" [(ngModel)]="user.nombre" class="form-control" id="Nombre" placeholder="Nombre">
+  </div>
+  <div class="form-group">
+    <label for="Usuario">Usuario</label>
+    <input type="text" name="usuario" #usuario="ngModel" [(ngModel)]="user.usuario " class="form-control" id="Usuario" placeholder="Usuario">
+  </div>
+  <div class="form-group">
+    <label for="Email">Email</label>
+    <input type="text" name="email" #email="ngModel" [(ngModel)]="user.email" class="form-control" id="Email" placeholder="Email">
+  </div>
+
+  <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+    </div>
+    <div class="custom-file">
+      <input type="file" (change)="fileChangeEvent($event)" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
+      <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
