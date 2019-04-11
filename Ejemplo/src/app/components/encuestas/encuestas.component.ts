@@ -3,6 +3,7 @@ import { EncuestaService } from 'src/app/services/encuesta.service';
 import { Encuesta } from 'src/app/models/encuesta.model';
 import { GLOBAL } from 'src/app/services/global.service';
 import { UserService } from 'src/app/services/user.service';
+import { Comentario } from 'src/app/models/comentario.model';
 
 @Component({
   selector: 'app-encuestas',
@@ -23,6 +24,10 @@ export class EncuestasComponent implements OnInit {
   public encuestas: Encuesta; // se traen los datos del modelo
   public encuestasModel: Encuesta;  //se envian los datos al modelo
 
+  //Comentarios variables
+  public coment: Comentario;    //Agrega los comentarios
+  public coments: Comentario;   //Lista los comentario
+
   constructor(
     private _encuestaService: EncuestaService,
     private _userService: UserService
@@ -38,10 +43,47 @@ export class EncuestasComponent implements OnInit {
       [],
       ""
     )
+    this.coment = new Comentario("","","","");
   }
 
   ngOnInit() {
     this.getEncuestas();
+  }
+
+  getComentarios(id){
+    this._encuestaService.getComents(id, this.token).subscribe(
+      response => {
+        if(response.comentarios){
+          console.log(response.comentarios)
+          this.coments = response.comentarios;
+        }
+      },
+      error=>{
+        var errorMessage = <any>error;
+        console.log(errorMessage);
+        if (errorMessage != null) {
+          this.status = 'Error'
+        }
+      }
+    )
+  }
+
+  addComentario(id){
+    this._encuestaService.addComent(this.token, id, this.coment).subscribe(
+      response =>{
+        if(response.encuesta){
+          this.status = 'Ok';
+          console.log(response.encuesta);
+        }
+      },
+      error=>{
+        var errorMessage = <any>error;
+        console.log(errorMessage);
+        if (errorMessage != null) {
+          this.status = 'Error'
+        }
+      }
+    )
   }
 
   getEncuesta(id){

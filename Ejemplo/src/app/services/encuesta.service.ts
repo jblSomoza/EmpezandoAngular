@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { GLOBAL } from './global.service';
 import { Observable } from 'rxjs';
 import { Encuesta } from '../models/encuesta.model';
+import { Comentario } from '../models/comentario.model'
 
 @Injectable()
 export class EncuestaService {
@@ -36,5 +37,18 @@ export class EncuestaService {
     let params = JSON.stringify(encuesta);
 
     return this._http.put(this.url + 'opinion/' + id, params, {headers: headers});
+  }
+
+  getComents(id, token): Observable<any>{
+    let headers = new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', token);
+    
+    return this._http.get(this.url + "coments/" + id, {headers: headers});
+  }
+
+  addComent(token, id, comentario: Comentario): Observable<any>{
+    let headers = new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', token);
+    let params = JSON.stringify(comentario)
+
+    return this._http.post(this.url + "coment/" + id, params, {headers: headers});
   }
 }

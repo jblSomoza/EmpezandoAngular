@@ -97,9 +97,55 @@ function addUserOpinion(req, res) {
     }
 }
 
+function comentarOpinion(req, res) {
+    var encuestaId = req.params.id;
+    var params = req.body;
+    var coment = new Comentario();
+
+    if (params.comentario) {
+        coment.comentario = params. comentario;
+        coment.encuesta = encuestaId;
+        coment.user = req.user.sub;
+
+        coment.save((err, comentarioGuardado)=>{
+            if(err) return res.status(500).send({message: 'Error en la peticion de comentario'});
+
+            if(!comentarioGuardado) return res.status(404).send({message: 'Error al guardar el comentario'});
+
+            Encuesta.findByIdAndUpdate(encuestaId, {new: true}, (err, encuestaEnc)=>{
+                if(err) return res.status(500).send({message: 'Error en la peticion de la encuesta'});
+
+                if(!encuestaEnc) return res.status(404).send({message: 'Error al listar la encuesta'});
+
+                encuestaEnc.listaComentarios.push(comentarioGuardado);
+                encuestaEnc.save();
+                
+                return res.status(200).send({
+                    comentario: comentarioGuardado,
+                    encuesta: encuestaEnc
+                });
+            })
+        })
+    }
+}
+
+function getComentarios(req, res) {
+    var encuestaId = req.params.id;
+
+    Comentario.find({encuesta: encuestaId}).populate('user').exec((err, comentarios)=>{
+        if(err) return res.status(500).send({message: 'Error en la peticion de comentarios'});
+
+        if(!comentarios) return res.status(404).send({message: 'Error al listar los comentarios'});
+
+        return res.status(200).send({comentarios});
+    });
+}
+
 module.exports = {
     getEncuestas,
     addEncuestas,
     getEncuesta,
-    addUserOpinion
+    addUserOpinion,
+    comentarOpinion,
+    getComentarios
 }
